@@ -1,0 +1,23 @@
+language: ruby
+before_install:
+  - gem update --system 2.1.11
+  - gem --version
+rvm:
+  - 1.8.7
+  - ree
+  - 1.9.2
+  - 1.9.3
+  - 2.0.0
+  - 2.1.0
+  - ruby-head
+  - jruby-18mode
+  - jruby-19mode
+  - jruby-20mode
+  - jruby-21mode
+  - jruby-head
+  - rbx-2.1.1
+  - rbx-2.2.3
+matrix:
+  allow_failures:
+    - rvm: ruby-head
+    - rvm: jruby-head
