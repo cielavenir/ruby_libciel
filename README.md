@@ -1,6 +1,6 @@
 # libciel
 
-[![Build Status](https://travis-ci.org/cielavenir/libciel.png)](https://travis-ci.org/cielavenir/libciel) [![Code Climate](https://codeclimate.com/github/cielavenir/libciel.png)](https://codeclimate.com/github/cielavenir/libciel)
+[![Build Status](https://travis-ci.org/cielavenir/ruby_libciel.png)](https://travis-ci.org/cielavenir/ruby_libciel) [![Code Climate](https://codeclimate.com/github/cielavenir/ruby_libciel.png)](https://codeclimate.com/github/cielavenir/ruby_libciel)
 
 ## Supported Ruby versions
 * Ruby 1.8.7 or later
