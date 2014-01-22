@@ -13,6 +13,6 @@ end
 if !defined?(Enumerator::Lazy)
 	require 'backports'
 end
-require 'dbi' if defined?(RUBY_ENGINE)&&RUBY_ENGINE=='jruby'
+require 'dbi' if !defined?(RUBY_ENGINE)||RUBY_ENGINE!='jruby'
 
 require File.expand_path(File.dirname(__FILE__)+'/../lib/libciel')
