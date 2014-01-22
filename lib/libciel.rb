@@ -4,7 +4,7 @@ module LibCiel
 end
 
 class Object
-	#PHPic extract().
+	#PHPic extract(). Hash will be injected into self as instance variables (@var).
 	def extract(h,overwrite=false)
 		h.each{|k,v|
 			if overwrite || !self.instance_variable_defined?('@'+k) then
