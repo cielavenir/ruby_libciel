@@ -10,4 +10,9 @@ if !defined?(RUBY_ENGINE)||RUBY_ENGINE=='ruby'
 	end
 end
 
+if !defined?(Enumerator::Lazy)
+	require 'backports'
+end
+require 'dbi'
+
 require File.expand_path(File.dirname(__FILE__)+'/../lib/libciel')

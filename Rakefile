@@ -1,5 +1,5 @@
 require 'bundler/gem_tasks'
-require './lib/cosvon'
+require './lib/libciel'
 
 ### below are copied from jeweler ###
 
@@ -26,7 +26,7 @@ begin
 	require 'rdoc/task'
 	Rake::RDocTask.new do |rdoc|
 		rdoc.rdoc_dir = 'rdoc'
-		rdoc.title = 'cosvon '+CoSVON::VERSION
+		rdoc.title = 'libciel '+LibCiel::VERSION
 		rdoc.main = 'README.md'
 		rdoc.rdoc_files.include('README.*')
 		rdoc.rdoc_files.include('LICENSE.*')

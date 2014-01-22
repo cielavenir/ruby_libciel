@@ -1,12 +1,28 @@
 module LibCiel
+	#Version string
 	VERSION='0.0.0.1'
 end
 
+class Object
+	#PHPic extract().
+	def extract(h,overwrite=false)
+		h.each{|k,v|
+			if overwrite || !self.instance_variable_defined?('@'+k) then
+				self.instance_variable_set('@'+k,v) #k should always be String
+			end
+		}
+	end
+end
+
 module Kernel
+	#Pythonic zip. The same as a.shift.zip(*a).
 	def zip(a) a.shift.zip(*a) end
 end
 
 module Enumerable
+	#Squeezes the same element. This behaves like C++ unique().
+	#To get the similar result to Array#uniq, you need to sort it prior.
+	# Calculation order is O(n).
 	def squeeze
 		r=[]
 		cur=nil
@@ -20,12 +36,12 @@ module Enumerable
 	end
 end
 
-#Make sure to load enumerable/lazy prior, on Ruby 1.9 or below.
-#Enumerable::Lazy in Ruby 1.9 (if enumerable/lazy is loaded)
-#Enumerator::Lazy in Ruby 2.0+
 class Enumerator
 	begin
 	Lazy.class_eval{
+		#Enumerator.Lazy version of Enumerable#squeeze.
+		#Enumerator.Lazy is evaluated as Enumerable::Lazy on Ruby 1.9 + enumerable/lazy, otherwise Enumerator::Lazy.
+		# To use this method, on Ruby <2.0, you need to require enumerable/lazy or backports before requiring libciel.
 		def squeeze
 			first=true
 			cur=nil
@@ -42,6 +58,9 @@ class Enumerator
 end
 
 class Array
+	#Enumerates permutation of Array.
+	#Unlike Array#permutation, there are no duplicates in generated permutations.
+	#Instead, elements must be comparable.
 	def permutation2(n=self.size)
 		return to_enum(:permutation2,n) unless block_given?
 		return if n<0||self.size<n
@@ -60,14 +79,19 @@ class Array
 end
 
 class String
+	#Rotate string to the left with count.
+	#Specifying negative number indicates rotation to the right.
 	def rotate(count=1)
-		count=self.length+count if count<0
-		self.slice(self.length-count,count)+self.slice(0,self.length-count)
+		count+=self.length if count<0
+		self.slice(count,self.length-count)+self.slice(0,count)
 	end
+	#Destructive version of String#rotate
 	def rotate!(count=1) self.replace(self.rotate(count)) end
 end
 
 class Hash
+	#nil safe version of Hash#[].
+	# h.exists_rec?(['hello','world']) is the same as h['hello'].try.send(:[],'world').
 	def exists_rec?(a)
 		#if a.length<1 then return false
 		if !self.include?(a[0]) then return nil end           #if not found
@@ -75,6 +99,7 @@ class Hash
 		if !self[a[0]].is_a?(Hash) then return nil end #if not last and child not hash
 		return self[a[0]].exists_rec?(a[1..-1])               #check child
 	end
+	#Returns self.dup with overwriting par.
 	def patch(par)
 		h=self.dup
 		par.each{|k,v|h[k]=v}
@@ -82,19 +107,21 @@ class Hash
 	end
 end
 
-begin
 module DBI
-	class << self
-		def connect_transaction(driver_url, user=nil, auth=nil, params=nil, &block)
-			x=connect(driver_url, user, auth, params)
-			begin
-				x.transaction(&block)
-			ensure
-				x.disconnect
-			end
+	#connect-transaction-disconnect triplet.
+	# To use this method, you need to require dbi before requiring libciel.
+	def self.connect_transaction(driver_url, user=nil, auth=nil, params=nil, &block)
+		x=connect(driver_url, user, auth, params)
+		begin
+			x.transaction(&block)
+		ensure
+			x.disconnect
 		end
 	end
+
 	class DatabaseHandle
+		#execute-map,count-finish triplet.
+		# To use this method, you need to require dbi before requiring libciel.
 		def execute_immediate(stmt,*bindvars,&block)
 			sth=execute(stmt,*bindvars)
 			ret=0
@@ -107,4 +134,3 @@ module DBI
 		end
 	end
 end
-rescue NameError=>e; end
