@@ -8,3 +8,7 @@
 * rubinius 2.1.1 or 2.2.3 (or later, maybe)
   * 2.2.1 and 2.2.2 are not working.
 * (Possibly) ironruby / macruby / topaz etc
+
+## Notice
+* **Ruby 2.0+ cannot handle dbd-sqlite3.**
+* jruby cannot handle dbi.
