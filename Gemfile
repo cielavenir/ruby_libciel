@@ -6,8 +6,10 @@ end
 
 group :test do
 	gem 'backports'
-	gem 'dbi'
-	gem 'dbd-sqlite3'
+	platforms :ruby do
+		gem 'dbi'
+		gem 'dbd-sqlite3'
+	end
 end
 
 group :development, :test do

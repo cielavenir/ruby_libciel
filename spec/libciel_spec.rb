@@ -88,6 +88,8 @@ end
 
 describe DBI do
 	specify 'connect and execute' do
+		pending 'dbd-sqlite3 seems stopped working from Ruby 2.0' if RUBY_VERSION>='2.0'
+		pending 'dbd-sqlite3 is not supported by jruby' if defined?(RUBY_ENGINE)&&RUBY_ENGINE=='jruby'
 		DBI.connect('DBI:SQLite3:'+File.dirname(__FILE__)+'/test.sqlite',nil,nil,'AutoCommit'=>false){|dbi|
 			#dbi.execute_immediate("create table test ( message varchar )")
 			dbi.execute_immediate("select * from test"){|e|
