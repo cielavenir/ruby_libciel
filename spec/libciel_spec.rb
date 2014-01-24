@@ -11,27 +11,50 @@ describe Object do
 end
 
 describe Kernel do
-	specify 'zip' do
-		zip([[1,2],[3,4]]).should eq [[1,3],[2,4]]
+	context 'zip' do
+		specify 'basic case' do
+			a=[[1,2],[3,4]]
+			zip(a).should eq [[1,3],[2,4]]
+			a.transpose.should eq [[1,3],[2,4]]
+		end
+		specify 'awkward case' do
+			a=[[1,2,3],[4,5]]
+			zip(a).should eq [[1, 4],[2, 5],[3, nil]]
+			lambda{a.transpose}.should raise_error
+		end
 	end
 end
 
 describe Enumerable do
-	specify 'squeeze' do
-		[1,2,2,3,3,2,1].squeeze.should eq [1,2,3,2,1]
+	context 'squeeze' do
+		specify 'example' do
+			[1,2,2,3,3,2,1].squeeze.should eq [1,2,3,2,1]
+		end
+		specify 'sort.squeeze is eq uniq' do
+			[1,2,2,3,3,2,1].sort.squeeze.should eq [1,2,3]
+		end
 	end
 end
 
 describe Enumerator::Lazy do
-	specify 'squeeze' do
+	specify 'squeeze enum' do
 		[1,2,2,3,3,2,1].lazy.squeeze.select(&:odd?).to_a.should eq [1,3,1]
 	end
 end
 
 describe Array do
-	specify 'permutation2' do
-		[1,1,2,3].permutation2.to_a.should_not eq [1,1,2,3].permutation.to_a
-		[1,1,2,3].permutation2.to_a.should eq [1,1,2,3].permutation.to_a.uniq
+	context 'permutation2' do
+		specify 'example' do
+			[1,1,2,2,3].permutation2(2).to_a.should eq [
+				[1, 1], [1, 2], [1, 3], [2, 1], [2, 2], [2, 3], [3, 1], [3, 2]
+			]
+		end
+		it 'is not eq permutation.to_a' do
+			[1,1,2,3].permutation2.to_a.should_not eq [1,1,2,3].permutation.to_a
+		end
+		it 'is eq permutation.to_a.uniq' do
+			[1,1,2,3].permutation2.to_a.should eq [1,1,2,3].permutation.to_a.uniq
+		end
 	end
 end
 
@@ -64,8 +87,8 @@ describe Hash do
 		specify 'usual search' do
 			h['hello']['world'].should eq 42
 		end
-		specify 'exists_rec?' do
-			h.exists_rec?(['hello','world']).should eq 42
+		specify 'fetch_nested' do
+			h.fetch_nested(*['hello','world']).should eq 42
 		end
 	end
 	context 'dangerous case' do
@@ -73,16 +96,9 @@ describe Hash do
 		specify 'usual search' do
 			lambda{h['hello']['world']}.should raise_error
 		end
-		specify 'exists_rec?' do
-			h.exists_rec?(['hello','world']).should eq nil
+		specify 'fetch_nested' do
+			h.fetch_nested(*['hello','world']).should eq nil
 		end
-	end
-	specify 'patch' do
-		h={'hello'=>1,'world'=>2}
-		h_dup=h.dup
-		answer={'hello'=>1,'world'=>42}
-		h.patch({'world'=>42}).should eq answer
-		h_dup.should eq h
 	end
 end
 
@@ -90,7 +106,7 @@ describe DBI do
 	specify 'connect and execute' do
 		pending 'dbd-sqlite3 seems stopped working from Ruby 2.0' if RUBY_VERSION>='2.0'
 		pending 'dbd-sqlite3 is not supported by jruby' if defined?(RUBY_ENGINE)&&RUBY_ENGINE=='jruby'
-		DBI.connect('DBI:SQLite3:'+File.dirname(__FILE__)+'/test.sqlite',nil,nil,'AutoCommit'=>false){|dbi|
+		DBI.connect_transaction('DBI:SQLite3:'+File.dirname(__FILE__)+'/test.sqlite',nil,nil,'AutoCommit'=>false){|dbi|
 			#dbi.execute_immediate("create table test ( message varchar )")
 			dbi.execute_immediate("select * from test"){|e|
 				e.should eq ['hello']

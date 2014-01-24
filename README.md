@@ -9,6 +9,10 @@
   * 2.2.1 and 2.2.2 are not working.
 * (Possibly) ironruby / macruby / topaz etc
 
-## Notice
+## Note
 * **Ruby 2.0+ cannot handle dbd-sqlite3.**
 * jruby cannot handle dbi.
+
+## Warning
+* This library is experimental. Incompatible API change might happen. You might want to include the source directly.
+* None of my projects (cTouch (builder) / yomebrowser / picrawler) don't depend on this gem.
