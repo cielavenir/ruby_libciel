@@ -1,4 +1,5 @@
 require File.expand_path(File.dirname(__FILE__)+'/array/permutation2')
+require File.expand_path(File.dirname(__FILE__)+'/array/squeeze')
 require File.expand_path(File.dirname(__FILE__)+'/enumerable/squeeze')
 require File.expand_path(File.dirname(__FILE__)+'/enumerator/lazy/squeeze')
 require File.expand_path(File.dirname(__FILE__)+'/hash/fetch_nested')
@@ -11,5 +12,5 @@ require File.expand_path(File.dirname(__FILE__)+'/dbi/connect_transaction')
 
 module LibCiel
 	#Version string
-	VERSION='0.0.0.3'
+	VERSION='0.0.0.4'
 end

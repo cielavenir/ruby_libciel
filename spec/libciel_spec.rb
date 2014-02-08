@@ -30,7 +30,7 @@ describe Enumerable do
 		specify 'example' do
 			[1,2,2,3,3,2,1].squeeze.should eq [1,2,3,2,1]
 		end
-		specify 'sort.squeeze is eq uniq' do
+		specify 'sort.squeeze eq uniq' do
 			[1,2,2,3,3,2,1].sort.squeeze.should eq [1,2,3]
 		end
 	end
@@ -49,13 +49,18 @@ describe Array do
 				[1, 1], [1, 2], [1, 3], [2, 1], [2, 2], [2, 3], [3, 1], [3, 2]
 			]
 		end
-		it 'is not eq permutation.to_a' do
+		it 'not eq permutation.to_a' do
 			[1,1,2,3].permutation2.to_a.should_not eq [1,1,2,3].permutation.to_a
 		end
-		it 'is eq permutation.to_a.uniq' do
+		it 'eq permutation.to_a.uniq' do
 			[1,1,2,3].permutation2.to_a.should eq [1,1,2,3].permutation.to_a.uniq
 		end
 	end
+	specify 'squeeze!' do
+		a=[1,2,2,3,3,2,1]
+		a.squeeze!
+		a.should eq [1,2,3,2,1]
+	end	
 end
 
 describe String do
