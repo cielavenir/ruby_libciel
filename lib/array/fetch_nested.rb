@@ -1,6 +1,8 @@
-class Hash
+#Note: this file is exactly the same as Hash#fetch_nested except the class name.
+
+class Array
 	#nil safe version of Hash#[].
-	# h.fetch_nested(*['hello','world']) is basically the same as h['hello'].try.send(:[],'world').
+	# a.fetch_nested(*[0,1]) is basically the same as a[0].try.send(:[],1).
 	def fetch_nested(*keys)
 		begin
 			keys.reduce(self){|accum, k| accum.fetch(k)}
