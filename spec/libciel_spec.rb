@@ -61,6 +61,9 @@ describe Array do
 		a.squeeze!
 		a.should eq [1,2,3,2,1]
 	end	
+	specify 'fetch_nested' do
+		[[1,2,3]].fetch_nested(0,1).should eq 2
+	end
 end
 
 describe String do
@@ -83,6 +86,11 @@ describe String do
 			s.rotate!(-2)
 			s.should eq 'ghabcdef'
 		end
+	end
+	specify 'phpass' do
+		s='hello'
+		encpass=s.gen_phpass
+		s.phpass(encpass).should eq encpass
 	end
 end
 
